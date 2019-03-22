@@ -3,6 +3,8 @@ import os
 import shutil
 import torch
 import config
+from PIL import Image
+import numpy as np
 # =============================================================================
 # General purpose utils
 # =============================================================================
@@ -108,3 +110,9 @@ def load_checkpoint(checkpoint, model, params, optimizer=None):
 # =============================================================================
 # Visualization related utils
 # =============================================================================
+def load_image(path, size=(224, 224), RGB=False):
+    img = Image.open(path).resize(size)
+    if RGB:
+        img = img.convert('RGB')
+    return np.array(img)
+    

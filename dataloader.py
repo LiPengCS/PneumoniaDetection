@@ -6,7 +6,6 @@ import os
 import utils
 import config
 
-
 transform = T.Compose([
                 T.Resize((224,224)),
                 T.ToTensor(),
@@ -24,6 +23,8 @@ def fetch_dataloaders(data_dir, params):
 # params = utils.load_params()
 # dataloaders = fetch_dataloaders(config.data_dir, params)
 # for X, y in dataloaders['test']:
-#     image = T.ToPILImage()(X[0])
-#     image.show()
+#     print(X.shape)
 #     break
+    # image = T.ToPILImage()(X[0])
+    # image.show()
+    # break

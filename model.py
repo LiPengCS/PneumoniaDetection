@@ -2,7 +2,6 @@ import torchvision.models as models
 import torch.nn as nn
 import numpy as np
 
-
 class MyAlexNet(nn.Module):
     def __init__(self, params):
         super(MyAlexNet, self).__init__()

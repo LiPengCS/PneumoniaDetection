@@ -1,5 +1,6 @@
 *.npy
 *.pyc
+*.jpeg
 *.jpg
 *.tar
 .DS_Store
