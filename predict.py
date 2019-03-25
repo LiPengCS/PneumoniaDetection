@@ -27,7 +27,7 @@ def predict(X, y=None):
     model, params = get_best_model()
     model.eval()
     with torch.no_grad():
-        X = torch.cat([transform(Image.fromarray(x).convert('RGB')).unsqueeze(0) for x in X])
+        X = utils.preprocess(X)
         output = model(X)
         pre_output = model.pre_output
         prob = F.softmax(output, dim=1)

@@ -5,6 +5,7 @@ import torch
 import config
 from PIL import Image
 import numpy as np
+from dataloader import transform
 # =============================================================================
 # General purpose utils
 # =============================================================================
@@ -116,3 +117,6 @@ def load_image(path, size=(224, 224), RGB=False):
         img = img.convert('RGB')
     return np.array(img)
     
+def preprocess(X_list):
+    X = torch.cat([transform(Image.fromarray(x).convert('RGB')).unsqueeze(0) for x in X_list])
+    return X
