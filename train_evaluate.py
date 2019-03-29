@@ -40,7 +40,7 @@ def train(model, dataloader, optimizer, loss_fn, metric, params):
     avg_loss = loss_avg()
     return avg_loss, metric_score
 
-def evaluate(model, dataloader, loss_fn, metric, params):
+def evaluate(model, dataloader, loss_fn, metric, params, test_mode=False):
     model.eval()
 
     loss_avg = utils.RunningAverage()
@@ -62,7 +62,7 @@ def evaluate(model, dataloader, loss_fn, metric, params):
     avg_loss = loss_avg() 
     output = np.concatenate(output, axis=0)
     y = np.concatenate(y, axis=0)
-    metric_score = metric(output, y)   
+    metric_score = metric(output, y, test_mode)   
     return avg_loss, metric_score
 
 def train_evaluate(model, optimizer, dataloader_train, dataloader_val, loss_fn, metric, 
@@ -131,5 +131,5 @@ if __name__ == '__main__':
     if args.evaluate:
         checkpoint = os.path.join(config.model_dir, 'best.pth.tar')
         utils.load_checkpoint(checkpoint, model, params)
-        test_loss, test_metric = evaluate(model, dataloaders['test'], loss_fn, metric, params)
+        test_loss, test_metric = evaluate(model, dataloaders['test'], loss_fn, metric, params, test_mode=True)
         print("test acc:", test_metric)

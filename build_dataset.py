@@ -34,6 +34,8 @@ n_val = int(N*0.1)
 
 norm_split = {}
 pneu_split = {}
+norm = norm[:N]
+pneu = pneu[:N]
 norm_split['train'], norm_split['val'], norm_split['test'] = np.split(norm, [n_tr, n_tr+n_val])
 pneu_split['train'], pneu_split['val'], pneu_split['test'] = np.split(pneu, [n_tr, n_tr+n_val])
 
