@@ -8,7 +8,7 @@ import utils
 
 norm_data_dir = "./data/raw/normal"
 pneu_dara_dir = "./data/raw/pneumonia"
-max_size = 500
+max_size = 1000
 
 # get norm and pneu
 norm = [os.path.join(norm_data_dir, file) for file in os.listdir(norm_data_dir)]
