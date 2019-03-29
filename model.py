@@ -25,7 +25,7 @@ loss_fn = nn.CrossEntropyLoss()
 
 def metric(y_score, y_true, test_mode=False):
     y_pred = np.argmax(y_score, axis=1)
-    acc = np.mean(y == y_pred)
+    acc = np.mean(y_true == y_pred)
     if not test_mode:
         return acc
     else:
