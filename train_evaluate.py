@@ -77,8 +77,8 @@ def train_evaluate(model, optimizer, dataloader_train, dataloader_val, loss_fn, 
         best_val_metric = checkpoint['best_val_metric']
         start_epoch = checkpoint['epoch']
 
-    train_loss = []
-    val_loss = []
+    train_losses = []
+    val_losses = []
 
     for e in range(params.num_epochs):
         print("epoch:", start_epoch + e + 1)
@@ -97,10 +97,10 @@ def train_evaluate(model, optimizer, dataloader_train, dataloader_val, loss_fn, 
             best_val_metric = val_metric
 
         tqdm.write('val_acc: {}, best_val_acc: {}'.format(val_metric, best_val_metric))
-        train_loss.append(tr_loss)
-        val_loss.append(val_loss)
-        np.save(os.path.join(model_dir, "train_loss.npy"), train_loss)
-        np.save(os.path.join(model_dir, "val_loss.npy"), val_loss)
+        train_losses.append(tr_loss)
+        val_losses.append(val_loss)
+        np.save(os.path.join(model_dir, "train_loss.npy"), train_losses)
+        np.save(os.path.join(model_dir, "val_loss.npy"), val_losses)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
