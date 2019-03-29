@@ -79,6 +79,8 @@ def train_evaluate(model, optimizer, dataloader_train, dataloader_val, loss_fn, 
 
     train_losses = []
     val_losses = []
+    train_accs = []
+    val_accs = []
 
     for e in range(params.num_epochs):
         print("epoch:", start_epoch + e + 1)
@@ -99,8 +101,12 @@ def train_evaluate(model, optimizer, dataloader_train, dataloader_val, loss_fn, 
         tqdm.write('val_acc: {}, best_val_acc: {}'.format(val_metric, best_val_metric))
         train_losses.append(tr_loss)
         val_losses.append(val_loss)
+        train_accs.append(tr_metric)
+        val_accs.append(val_metric)
         np.save(os.path.join(model_dir, "train_loss.npy"), train_losses)
         np.save(os.path.join(model_dir, "val_loss.npy"), val_losses)
+        np.save(os.path.join(model_dir, "train_acc.npy"), train_accs)
+        np.save(os.path.join(model_dir, "val_acc.npy"), val_accs)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
