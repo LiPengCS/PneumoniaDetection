@@ -29,8 +29,8 @@ np.random.shuffle(norm)
 np.random.shuffle(pneu)
 
 N = min(len(norm), max_size, len(pneu))
-n_tr = int(N*0.8)
-n_val = int(N*0.1)
+n_tr = int(N*0.6)
+n_val = int(N*0.2)
 
 norm_split = {}
 pneu_split = {}
