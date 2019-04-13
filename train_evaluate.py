@@ -3,7 +3,7 @@ import numpy as np
 import torch
 import config
 import os
-from model import MyAlexNet, loss_fn, metric
+from model import MyAlexNet, loss_fn, metric, MyAlexNetCAM
 from dataloader import fetch_dataloaders
 import torch.optim as optim
 import argparse
@@ -113,6 +113,8 @@ if __name__ == '__main__':
     parser.add_argument('--restore', default=False, action='store_true')
     parser.add_argument('--train', default=False, action='store_true')
     parser.add_argument('--evaluate', default=False, action='store_true')
+    parser.add_argument('--train_cam', default=False, action='store_true')
+
     args = parser.parse_args()
 
     params = utils.load_params()
@@ -121,15 +123,24 @@ if __name__ == '__main__':
     if params.cuda: torch.cuda.manual_seed(config.root_seed)
 
     dataloaders = fetch_dataloaders(config.data_dir, params)
-    model = MyAlexNet(params).to(device=params.device)
+
+    if not args.train_cam:
+        model = MyAlexNet(params).to(device=params.device)
+        model_dir = config.model_dir
+    else:
+        model = MyAlexNetCAM(params).to(device=params.device)
+        model_dir = config.cam_model_dir
 
     if args.train:
         optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=params.learning_rate)
         restore_file = 'last' if args.restore else None
         train_evaluate(model, optimizer, dataloaders['train'], dataloaders['val'], loss_fn, metric, 
-                        params, config.model_dir, restore_file=restore_file)
+                        params, model_dir, restore_file=restore_file)
     if args.evaluate:
-        checkpoint = os.path.join(config.model_dir, 'best.pth.tar')
+        checkpoint = os.path.join(config.model_dir, 'last.pth.tar')
         utils.load_checkpoint(checkpoint, model, params)
         test_loss, test_metric = evaluate(model, dataloaders['test'], loss_fn, metric, params, test_mode=True)
-        print("test acc:", test_metric)
+        for name, value in test_metric.items():
+            np.save(os.path.join(config.model_dir, name), value)
+
+
