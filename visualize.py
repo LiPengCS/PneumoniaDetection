@@ -168,13 +168,13 @@ def tsne_init():
     pickle.dump(t, open("./tsne.obj", 'wb'))
 
 def cam(img, y=None):
-    cam_value = predict_CAM([img], [y])
+    cam_value = predict_CAM([img], y)
     cam_value = cam_value - np.min(cam_value)
     cam_value = cam_value / np.max(cam_value)
     return show_heatmap(cam_value[0], img)
 
 def visualize(img, y=None):
-    y_pred, prob, activation = predict([img], [y])
+    y_pred, prob, activation = predict([img], y)
 
     # occlude
     occ_result = occlude(img)
@@ -183,7 +183,7 @@ def visualize(img, y=None):
     silency_result = silency_map(img, y_pred)
 
     # CAM
-    cam_result = cam(img, [y])
+    cam_result = cam(img, y)
 
     # tsne
     t = pickle.load(open("./tsne.obj", 'rb'))
@@ -212,7 +212,7 @@ pneu_images = get_images("pneumonia", 200)
 
 example_img = utils.load_image("./example.png")
 # example_img = pneu_images[0]
-y_pred, prob, visualize_result = visualize(example_img, 1)
+y_pred, prob, visualize_result = visualize(example_img)
 print(y_pred, prob)
 
 for name, result in visualize_result.items():
