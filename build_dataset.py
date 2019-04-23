@@ -8,7 +8,7 @@ import utils
 
 norm_data_dir = "./data/raw/normal"
 pneu_dara_dir = "./data/raw/pneumonia"
-max_size = 1000
+max_size = 5000
 
 # get norm and pneu
 norm = [os.path.join(norm_data_dir, file) for file in os.listdir(norm_data_dir)]
@@ -28,15 +28,18 @@ np.random.seed(1)
 np.random.shuffle(norm)
 np.random.shuffle(pneu)
 
-N = min(len(norm), max_size, len(pneu))
-n_tr = int(N*0.6)
-n_val = int(N*0.2)
-
+N = min(len(norm), max_size)
+n_tr = int(N*0.8)
+n_val = int(N*0.1)
 norm_split = {}
-pneu_split = {}
 norm = norm[:N]
-pneu = pneu[:N]
 norm_split['train'], norm_split['val'], norm_split['test'] = np.split(norm, [n_tr, n_tr+n_val])
+
+pneu_split = {}
+N = min(len(pneu), max_size)
+n_tr = int(N*0.8)
+n_val = int(N*0.1)
+pneu = pneu[:N]
 pneu_split['train'], pneu_split['val'], pneu_split['test'] = np.split(pneu, [n_tr, n_tr+n_val])
 
 # save images
@@ -44,7 +47,9 @@ def save_images(images, save_dir):
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     for i, img in enumerate(images):
-        save_path = os.path.join(save_dir, "{}.jpg".format(i))
+        # save_path = os.path.join(save_dir, "{}.jpg".format(i))
+        name = img.split('/')[-1].split('.')[0]
+        save_path = os.path.join(save_dir, "{}.jpg".format(name))
         copyfile(img, save_path)
 
 for split in ['train', 'val', 'test']:

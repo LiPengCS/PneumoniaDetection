@@ -98,5 +98,3 @@ def predict_CAM(X, y=None):
     if y is not None:
         print("Accuracy:", np.mean(y == y_pred))
     return cam
-
-get_best_model(return_weights=True)

@@ -19,12 +19,3 @@ def fetch_dataloaders(data_dir, params):
     dataloaders = {split: DataLoader(datasets[split], batch_size=params.batch_size, shuffle=True, num_workers=4) 
                 for split in ['train', 'val', 'test']}
     return dataloaders
-
-# params = utils.load_params()
-# dataloaders = fetch_dataloaders(config.data_dir, params)
-# for X, y in dataloaders['test']:
-#     print(X.shape)
-#     break
-    # image = T.ToPILImage()(X[0])
-    # image.show()
-    # break

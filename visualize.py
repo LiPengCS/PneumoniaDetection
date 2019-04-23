@@ -11,7 +11,6 @@ import os
 import pickle
 from torchvision.utils import make_grid
 
-
 def occlude(img, label=None, n_row=8, n_col=8, occ_color=0, show_example=False):
     """ Generate heatmap by occluding
     
@@ -21,7 +20,7 @@ def occlude(img, label=None, n_row=8, n_col=8, occ_color=0, show_example=False):
     if label is not None: 
         label = [label]
     y_pred, prob, pre_output = predict([img], label)
-    img_h, img_w = img.shape
+    img_h, img_w = img.shape[0], img.shape[1]
     occ_h, occ_w = img_h // n_row, img_w // n_col
     occ_imgs = []
 
@@ -32,7 +31,7 @@ def occlude(img, label=None, n_row=8, n_col=8, occ_color=0, show_example=False):
             occ_imgs.append(new_img)
 
     _, probs, _ = predict(occ_imgs)
-    diff = probs.reshape(n_row, n_col) - prob
+    diff = np.abs(probs.reshape(n_row, n_col) - prob)
     result = show_heatmap(diff, img)
     return result
 
@@ -162,8 +161,8 @@ def fig_to_np(fig):
     return X
 
 def tsne_init():
-    norm_images = get_images("normal", 200)
-    pneu_images = get_images("pneumonia", 200)
+    norm_images = get_images("normal", 100)
+    pneu_images = get_images("pneumonia", 100)
     t = tsne(norm_images, pneu_images)
     pickle.dump(t, open("./tsne.obj", 'wb'))
 
@@ -171,7 +170,8 @@ def cam(img, y=None):
     cam_value = predict_CAM([img], y)
     cam_value = cam_value - np.min(cam_value)
     cam_value = cam_value / np.max(cam_value)
-    return show_heatmap(cam_value[0], img)
+    cam_value = np.uint8(255 * cam_value)
+    return show_heatmap(cam_value, img)
 
 def visualize(img, y=None):
     y_pred, prob, activation = predict([img], y)
@@ -184,9 +184,12 @@ def visualize(img, y=None):
 
     # CAM
     cam_result = cam(img, y)
+    plt.show()
 
     # tsne
-    t = pickle.load(open("./tsne.obj", 'rb'))
+    norm_images = get_images("normal", 100)
+    pneu_images = get_images("pneumonia", 100)
+    t = tsne(norm_images, pneu_images)
     tsne_result = t.show([img])
 
     # activation map
@@ -206,18 +209,3 @@ def visualize(img, y=None):
     }
 
     return y_pred, prob, visualize_result
-
-norm_images = get_images("normal", 200)
-pneu_images = get_images("pneumonia", 200)
-
-example_img = utils.load_image("./example.png")
-# example_img = pneu_images[0]
-y_pred, prob, visualize_result = visualize(example_img)
-print(y_pred, prob)
-
-for name, result in visualize_result.items():
-    if name != "kernel":
-        Image.fromarray(result).save("./result/{}.png".format(name))
-    else:
-        for i, res in enumerate(result):
-            Image.fromarray(res).save("./result/{}_{}.png".format(name, i))
