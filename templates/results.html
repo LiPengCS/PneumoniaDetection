@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Result Presentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{{ url_for('static',filename='styles/W3.css') }}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<body>
+	{% if results %}
+    <div class="w3-container w3-content w3-padding-64" style="max-width:1000px" id="example">
+        <div class="w3-padding-32">
+            <h1 class="w3-wide w3-center">RESULTS</h1>
+        </div>
+
+        <div class="w3-center">
+            <h2>{{predict[0]}}</h2>
+            <h3>Risk of pneumonia: {{predict[1]}}</h3>
+        </div>
+
+        <div class="w3-row w3-padding-32">
+          <div class="w3-third  w3-padding-32">
+              <p class="w3-opacity w3-center"><i>CAM Figure</i></p>
+                <img src="./static/result/{{ results['cam'] }}" alt="CAM" style="width:100%">
+          </div>
+          <div class="w3-third w3-padding-32">
+              <p class="w3-opacity w3-center"><i>OCCLUDE Figure</i></p>
+                <img src="./static/result/{{ results['occlude'] }}" alt="Occlude" style="width:100%">
+          </div>
+          <div class="w3-third w3-padding-32">
+              <p class="w3-opacity w3-center"><i>SILENCE Figure</i></p>
+                <img src="./static/result/{{ results['silency_map'] }}" alt="Silency Map" style="width:100%">
+          </div>
+        </div>
+
+        <div class="w3-row w3-padding-32">
+          <div class="w3-center">
+          <p class="w3-opacity w3-center"><i>TSNE Figure</i></p>
+            <img src="./static/result/{{ results['tsne'] }}" alt="Tsne" class="w3-image w3-blackscale-min" style="width:60%">
+          </div>
+        </div>
+
+        <div class="w3-row-padding w3-padding-32" style="margin:0 -16px"> 
+          <div class="w3-center">
+            <p class="w3-opacity w3-center"><i>Activation Figure</i></p>
+            <img src="./static/result/{{ results['activation'] }}" alt="Activation" class="w3-image w3-blackscale-min" style="width:80%">
+          </div>
+        </div>
+
+        <div class="w3-row-padding w3-padding-32" style="margin:0 -16px"> 
+          <div class="w3-center">
+            <p class="w3-opacity w3-center"><i>Kernel Layer 1</i></p>
+            <img src="./static/result/{{ results['kernel'][0] }}" alt="Kernel 1" class="w3-image w3-blackscale-min" style="width:80%">
+          </div>
+        </div>
+
+        <div class="w3-row-padding" style="margin:0 -16px"> 
+          <div class="w3-center">
+            <p class="w3-opacity w3-center"><i>Kernel Layer 2</i></p>
+            <img src="./static/result/{{ results['kernel'][1] }}" alt="Kernel 2" class="w3-image w3-blackscale-min" style="width:80%">
+          </div>
+        </div>
+
+        <div class="w3-row-padding" style="margin:0 -16px"> 
+          <div class="w3-center">
+            <p class="w3-opacity w3-center"><i>Kernel Layer 3</i></p>
+            <img src="./static/result/{{ results['kernel'][2] }}" alt="Kernel 3" class="w3-image w3-blackscale-min" style="width:80%">
+          </div>
+        </div>
+
+        <div class="w3-row-padding" style="margin:0 -16px"> 
+          <div class="w3-center">
+            <p class="w3-opacity w3-center"><i>Kernel Layer 4</i></p>
+            <img src="./static/result/{{ results['kernel'][3] }}" alt="Kernel 4" class="w3-image w3-blackscale-min" style="width:80%">
+          </div>
+        </div>
+
+        <div class="w3-row-padding" style="margin:0 -16px"> 
+          <div class="w3-center">
+            <p class="w3-opacity w3-center"><i>Kernel Layer 5</i></p>
+            <img src="./static/result/{{ results['kernel'][4] }}" alt="Kernel 5" class="w3-image w3-blackscale-min" style="width:80%">
+          </div>
+        </div>
+  </div>
+    {% else %}
+        No results :(
+    {% endif %}
+</body>
+</html>
+

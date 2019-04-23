@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Pneumonia Detection</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{{ url_for('static',filename='styles/W3.css') }}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<style>
+/* Progress loader */
+#loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Latin font*/
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'), url(https://fonts.gstatic.com/s/lato/v15/S6uyw4BMUTPHjxAwXiWtFCfQ7A.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'), url(https://fonts.gstatic.com/s/lato/v15/S6uyw4BMUTPHjx4wXiWtFCc.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+body {font-family: "Lato", sans-serif}
+.mySlides {display: none}
+
+/* overlay effect */
+.container {
+  position: relative;
+  width: 50%;
+}
+
+.container:hover .overlay {
+  opacity: 1;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #000000;
+}
+
+.text {
+  color: white;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+</style>
+<body>
+
+<!-- Navigation Bar -->
+<div class="w3-top">
+  <div class="w3-bar w3-black w3-card">
+    <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="Toggle()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">HOME</a>
+    <a href="#introduction" class="w3-bar-item w3-button w3-padding-large w3-hide-small">INTRO</a>
+    <a href="#analysis" class="w3-bar-item w3-button w3-padding-large w3-hide-small">DEMO</a>
+    <a href="#example" class="w3-bar-item w3-button w3-padding-large w3-hide-small">EXAMPLE</a>
+    <a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">CONTACT</a>
+  </div>
+</div>
+
+<!-- Navigation Bar Top -->
+<div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+  <a href="#introduction" class="w3-bar-item w3-button w3-padding-large" onclick="Toggle()">INTRO</a>
+  <a href="#analysis" class="w3-bar-item w3-button w3-padding-large" onclick="Toggle()">DEMO</a>
+  <a href="#example" class="w3-bar-item w3-button w3-padding-large" onclick="Toggle()">EXAMPLE</a>
+  <a href="#contact" class="w3-bar-item w3-button w3-padding-large" onclick="Toggle()">CONTACT</a>
+</div>
+
+<!-- Page content -->
+<div class="w3-content" style="max-width:2000px;margin-top:46px">
+
+
+  <!-- Automatic Slideshow Images -->
+  <div class="mySlides w3-display-container w3-center">
+    <img src="{{ url_for('static',filename='images/anatomy1.jpg') }}" style="width:100%">
+    <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
+      <h1 class="w3-wide w3-center">Pneumonia Detection on Chest X-Rays with Deep Learning</h1>
+      <h3><em>Group Xeeker</em></h3>   
+    </div>
+  </div>
+  <div class="mySlides w3-display-container w3-center">
+    <img src="{{ url_for('static',filename='images/brain.jpg') }}" style="width:100%">
+    <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
+      <h1 class="w3-wide w3-center">Pneumonia Detection on Chest X-Rays with Deep Learning</h1>
+      <h3><em>Group Xeeker</em></h3>    
+    </div>
+  </div>
+
+  <!-- Intro -->
+  <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:1000px" id="introduction">
+    <h2 class="w3-wide">WHAT IS PNEUMONIA?</h2>
+    <p class="w3-opacity"><i>A common disease need to be cured</i></p>
+    <p class="w3-justify">More than 20 million children around the world are hospitalized with pneumonia each year, 2 million of whom die from the disease. While common, diagnosing pneumonia is a difficult task. The currently best available method is to review chest X-Rays, which relies on highly trained specialists. Significant research efforts have focus on automating detection  of potential pneumonia on chest X-Rays with deep learning and the state of the art states they have outperformed radiologists. However, since deep learning models operate as a “black box” with opaque decision making process, people out of ML community keep skeptical about their performance, which has been one of the biggest barriers to the integration of deep learning in healthcare.</p>
+    <div class="w3-row w3-padding-32">
+      <div class="w3-third  w3-padding-32">
+        <div class="w3-container">
+          <div class="w3-card-4 container" style="width:100%">
+            <div class="w3-container w3-center w3-black">
+              <p>What have we done?</p>
+            </div>
+            <img src="{{ url_for('static',filename='images/skeleton.jpg') }}" style="width:100%">
+            <div class="overlay">
+              <div class="text">Trained a convolutional neural network (CNN) to identify pneumonia via X-ray figures</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w3-third w3-padding-32">
+        <div class="w3-container">
+          <div class="w3-card-4 container" style="width:100%">
+            <div class="w3-container w3-center w3-black">
+              <p>What is the plan?</p>
+            </div>
+            <img src="{{ url_for('static',filename='images/skull.jpg') }}" style="width:100%">
+            <div class="overlay">
+              <div class="text">Operate the model and interpret with different visualization techniques</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w3-third w3-padding-32">
+        <div class="w3-container">
+          <div class="w3-card-4 container" style="width:100%">
+            <div class="w3-container w3-center w3-black">
+              <p>How do we present?</p>
+            </div>
+            <img src="{{ url_for('static',filename='images/lungs.jpg') }}" style="width:100%">
+            <div class="overlay">
+              <div class="text">Construct this interactive and lucid website for general users and experts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analysis -->
+  <div class="w3-black" id="analysis">
+    <div class="w3-container w3-content w3-padding-64" style="max-width:1000px">
+      <h2 class="w3-wide w3-center">DEMO</h2>
+      <p class="w3-opacity w3-center"><i>Upload your X-ray figure to get diagnosis</i></p><br>
+      <div class="w3-row-padding w3-padding-32" style="margin:0 -16px">
+        <div class="w3-third w3-margin-bottom"></div>
+        <div class="w3-third w3-center w3-margin-bottom">
+          <img src="{{ url_for('static',filename='images/x.jpg') }}" style="width:100%" class="w3-hover-opacity">
+          <div class="w3-container w3-white">
+            <p><b>X-RAY FIGURE</b></p>
+            <p class="w3-opacity">Choose a local file</p>
+            <button class="w3-button w3-black w3-margin-bottom" onclick="document.getElementById('progressPanel').style.display='block'">Upload</button>
+          </div>
+        </div>
+        <div class="w3-third w3-margin-bottom"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Panel -->
+  <div id="progressPanel" class="w3-modal">
+    <div class="w3-modal-content w3-animate-top w3-card-4">
+      <header class="w3-container w3-dark-grey w3-center w3-padding-32"> 
+        <span onclick="document.getElementById('progressPanel').style.display='none'" 
+       class="w3-button w3-dark-grey w3-xlarge w3-display-topright">×</span>
+        <h2 class="w3-wide"><i class=" w3-margin-right"></i>ANALYSIS</h2>
+      </header>
+      <div class="w3-container">
+        <td>
+        <form id="upload-form" action="{{ url_for('upload') }}" target="_blank" method="POST" enctype="multipart/form-data">
+              <button class="w3-button w3-dark-grey w3-margin-top w3-margin-bottom" type="button" id="custom-button">Choose</button>
+              <span id="custom-text">No file chosen yet</span>
+              <input value="Choose" type="file" accept="image/*" name='file' id="real-button" hidden="hidden"/>
+
+              <input type="submit" value="Continue" id="upload-button" class="w3-button w3-block w3-dark-grey w3-padding-16 w3-section w3-right" onclick="document.getElementById('loading').style.display='block'; document.getElementById('progressPanel').style.display='none';">
+          </form>
+      </td>
+      </div>
+      <div class="w3-container">
+        <button class="w3-button w3-dark-grey w3-section" onclick="document.getElementById('progressPanel').style.display='none'">Close</button>
+        <p class="w3-right">Help</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Screen -->
+<div id="loading" class="w3-modal">
+    <div class="w3-modal-content w3-animate-top w3-card-4">
+		<header class="w3-container w3-dark-grey w3-center w3-padding-16"> 
+			<span onclick="document.getElementById('loading').style.display='none'" class="w3-button w3-dark-grey w3-xlarge w3-display-topright">×</span>
+			<h2 class="w3-wide"><i class=" w3-margin-right"></i>REDIRECTING TO A NEW PAGE</h2>
+		</header>
+		<div class="w3-container w3-dark-grey w3-center w3-padding-32"> 
+		  <div id="loader"></div>
+		</div>
+	</div>
+</div>
+
+
+  <!-- Example -->
+  <div class="w3-container w3-content w3-padding-64" style="max-width:1000px" id="example">
+    <h2 class="w3-wide w3-center">EXAMPLE</h2>
+    <p class="w3-opacity w3-center"><i>Deep Learning Workflow</i></p>
+    <img src="{{ url_for('static',filename='images/Alexnet.png') }}" class="w3-image w3-blackscale-min" style="width:100%">
+
+    <div class="w3-row w3-padding-32">
+      <div class="w3-third  w3-padding-32">
+          <p class="w3-opacity w3-center"><i>CAM Figure</i></p>
+            <img src="{{ url_for('static',filename='images/result/cam.png')}}" style="width:100%">
+      </div>
+      <div class="w3-third w3-padding-32">
+          <p class="w3-opacity w3-center"><i>OCCLUDE Figure</i></p>
+            <img src="{{ url_for('static',filename='images/result/occlude.png')}}" style="width:100%">
+      </div>
+      <div class="w3-third w3-padding-32">
+          <p class="w3-opacity w3-center"><i>SILENCE Figure</i></p>
+            <img src="{{ url_for('static',filename='images/result/silency_map.png')}}" style="width:100%">
+      </div>
+    </div>
+
+    <div class="w3-row w3-padding-32">
+      <div class="w3-center">
+      <p class="w3-opacity w3-center"><i>TSNE Figure</i></p>
+        <img src="{{ url_for('static',filename='images/result/tsne.png')}}" class="w3-image w3-blackscale-min" style="width:60%">
+      </div>
+    </div>
+
+    <div class="w3-row-padding w3-padding-32" style="margin:0 -16px"> 
+      <div class="w3-center">
+        <p class="w3-opacity w3-center"><i>Activation Figure</i></p>
+        <img src="{{ url_for('static',filename='images/result/activation.png')}}" class="w3-image w3-blackscale-min" style="width:80%">
+      </div>
+    </div>
+
+    <div class="w3-row-padding w3-padding-32" style="margin:0 -16px"> 
+      <div class="w3-center">
+        <p class="w3-opacity w3-center"><i>Kernel Figure</i></p>
+        <img src="{{ url_for('static',filename='images/result/kernel.png')}}" class="w3-image w3-blackscale-min" style="width:100%">
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact -->
+<div class="w3-black" id="contact">
+  <div class="w3-container w3-content w3-padding-64" style="max-width:1000px">
+    <h2 class="w3-wide w3-center">CONTACT</h2>
+    <p class="w3-opacity w3-center"><i>Have Problem? Contact Us!</i></p>
+    <div class="w3-row w3-padding-32">
+      <div class="w3-col m6 w3-large w3-margin-bottom">
+        <i class="fa fa-map-marker" style="width:30px"></i> Atlanta,GA,USA<br>
+        <i class="fa fa-phone" style="width:30px"></i> Phone: 1234567890<br>
+        <i class="fa fa-envelope" style="width:30px"> </i> Email: 123@gatech.edu<br>
+      </div>
+      <div class="w3-col m6">
+        <form action="/action_page.php" target="_blank">
+          <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
+            <div class="w3-half">
+              <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name">
+            </div>
+            <div class="w3-half">
+              <input class="w3-input w3-border" type="text" placeholder="Email" required name="Email">
+            </div>
+          </div>
+          <input class="w3-input w3-border" type="text" placeholder="Message" required name="Message">
+          <button class="w3-button w3-black w3-section w3-right" type="submit">SEND</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  
+<!-- End Page Content -->
+</div>
+
+<!-- Image of GT -->
+<img src="{{ url_for('static',filename='images/GT.jpeg') }}" class="w3-image w3-blackscale-min" style="width:100%">
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-black w3-xlarge">
+  <i class="fa fa-facebook-official w3-hover-opacity"></i>
+  <i class="fa fa-instagram w3-hover-opacity"></i>
+  <i class="fa fa-snapchat w3-hover-opacity"></i>
+  <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+  <i class="fa fa-twitter w3-hover-opacity"></i>
+  <i class="fa fa-linkedin w3-hover-opacity"></i>
+</footer>
+
+<script>
+// Automatic Slideshow
+var Index = 0;
+carousel();
+
+function carousel() {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";  
+  }
+  Index++;
+  if (Index > x.length) {Index = 1}    
+  x[Index-1].style.display = "block";  
+  setTimeout(carousel, 4000);    
+}
+
+// Used to toggle the menu on small screens when clicking on the menu button
+function Toggle() {
+  var x = document.getElementById("navDemo");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else { 
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+var modal = document.getElementById('progressPanel');
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+function selectFile(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        $('#centerDiv').show();
+        $('#url').val('http://');
+        reader.onload = function (e) {
+            $("#imageDiv").show();
+            $("#imageArea").css('width', 'auto');
+            $("#imageArea").css('height', 'auto');
+            $("#imageArea").attr("src", e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+        submitForm();
+    }
+}
+
+// Replace the input button with custom new button
+const realBtn = document.getElementById('real-button');
+const customBtn = document.getElementById('custom-button');
+const customTxt = document.getElementById('custom-text');
+
+customBtn.addEventListener("click",function(){
+  realBtn.click();
+});
+
+realBtn.addEventListener("change",function(){
+  if (realBtn.value){
+    customTxt.innerHTML = realBtn.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+  } else {
+    customTxt.innerHTML = "No file chosen yet"
+  }
+
+});
+
+</script>
+
+</body>
+</html>
