@@ -171,7 +171,7 @@ def cam(img, y=None):
     cam_value = cam_value - np.min(cam_value)
     cam_value = cam_value / np.max(cam_value)
     cam_value = np.uint8(255 * cam_value)
-    return show_heatmap(cam_value, img)
+    return show_heatmap(cam_value[0], img)
 
 def visualize(img, y=None):
     y_pred, prob, activation = predict([img], y)
@@ -184,7 +184,6 @@ def visualize(img, y=None):
 
     # CAM
     cam_result = cam(img, y)
-    plt.show()
 
     # tsne
     norm_images = get_images("normal", 100)
